@@ -21,30 +21,60 @@ class HomePage extends StatelessWidget {
           //evaluate state and show desired ui
           if (state is HomeLoadingState) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: Colors.orangeAccent,
+                backgroundColor: Colors.green,
+              ),
             );
           }
 
           //loaded state
           if (state is HomeLoadedState) {
             return Column(
-              children: [
-                Text(state.jokeCategory),
-                Text(state.jokeType),
-                Text(state.jokeId.toString()),
-                Text(state.delivery),
-                Text(state.setup),
-                ElevatedButton(
-                    onPressed: () =>
-                        BlocProvider.of<HomeBloc>(context).add(LoadApiEvent()),
-                    child: const Text('Refresh Joke'))
-              ],
-            );
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                        shadowColor: Colors.green,
+                        elevation: 5.2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 30.0, right: 30),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                'Category ${state.jokeCategory}',
+                                style: const TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Text(state.delivery),
+                              Text(
+                                state.setup,
+                                style: TextStyle(color: Colors.green),
+                              ),
+                              ElevatedButton(
+                                  onPressed: () =>
+                                      BlocProvider.of<HomeBloc>(context)
+                                          .add(LoadApiEvent()),
+                                  child: const Icon(
+                                    Icons.refresh,
+                                  ))
+                            ],
+                          ),
+                        )),
+                  ),
+                ]);
           }
           if (state is HomeNoInternetState) {
             return Text('NO internet');
           }
-          return Container();
+          return Text('Something went wrong');
         }),
       ),
     );
